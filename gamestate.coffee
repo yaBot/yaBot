@@ -1,5 +1,5 @@
 class GameState
-        _init: (ai) ->
+        constructor: (ai) ->
                 MemoizeInit this
                 @ai = ai
                 @timeElapsed = timeElapsed
@@ -12,43 +12,43 @@ class GameState
                 @cellsize = 4 # Size of each map tile
                 return null
 
-        getTimeElapsed = -> @timeElapsed
-        getTemplate = ->
+        getTimeElapsed: -> @timeElapsed
+        getTemplate: ->
                 if !@templates[type]
                         null
                 else
                         new EntityTemplate @templates[type]
-        applyCiv = (str) ->
+        applyCiv: (str) ->
                 str.replace /\{civ\}/g, @playerData.civ
 
-        getResources = ->
+        getResources: ->
                 new Resources this.playerData.resourceCounts
 
-        getMap = ->
+        getMap: ->
                 if @ai.map then @ai.map else @ai.passabilityMap
 
-        getPopulation = -> @playerData.popCount
-        getPopulationLimit = -> @playerData.popLimit
-        getPopulationMax = -> @playerData.popMax
+        getPopulation: -> @playerData.popCount
+        getPopulationLimit: -> @playerData.popLimit
+        getPopulationMax: -> @playerData.popMax
 
-        getPassabilityClassMask = (name) ->
+        getPassabilityClassMask: (name) ->
                 if name not of @ai.passabilityClasses
                         error "Tried to use invalid passability class name '" + name + "'"
                 return null
 
-        getPlayerID = -> @player
+        getPlayerID: -> @player
 
-        isPlayerAlly = (id) -> @playerData.isAlly[id]
-        isPlayerEnemy = (id) -> @playerData.isEnemy[id]
-        isEntityAlly = (ent) ->
+        isPlayerAlly: (id) -> @playerData.isAlly[id]
+        isPlayerEnemy: (id) -> @playerData.isEnemy[id]
+        isEntityAlly: (ent) ->
                 if ent and ent.owner
                         return this.playerData.isAlly[if typeof ent.owner is "function" then ent.owner() else ent.owner]
                 return false
-        isEntityEnemy = (ent) ->
+        isEntityEnemy: (ent) ->
                 if ent and ent.owner
                         return this.playerData.isEnemy[if typeof ent.owner is "function" then ent.owner() else ent.owner]
                 return false
-        isEntityEnemy = (ent) ->
+        isEntityEnemy: (ent) ->
                 if ent and ent.owner and typeof ent.owner is "function"
                         return ent.owner() == @player
                 else if ent and ent.owner
@@ -56,9 +56,9 @@ class GameState
 
                 return false
 
-        getOwnEntities = -> new EntityCollection @ai @ai._ownEntities
+        getOwnEntities: -> new EntityCollection @ai @ai._ownEntities
 
-        getOwnEntitiesWithRole = Memoize 'getOwnEntitiesWithRole', (role) ->
+        getOwnEntitiesWithRole: Memoize('getOwnEntitiesWithRole', (role) ->
                 metas = @ai._entityMetadata
                 if role?
                         return @getOwnEntities().filter_raw (ent) ->
@@ -73,8 +73,9 @@ class GameState
                                 if !metadata or !('role' of metadata)
                                         return true
                                 return (metadata.role is `undefined`)
+                )
 
-        countEntitiesWithType = (type) ->
+        countEntitiesWithType: (type) ->
                 foundationType = "foundation|" + type
                 count=0
                 @getOwnEntities().forEach ()->
