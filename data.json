@@ -1,0 +1,5 @@
+{
+  "name": "yaBot",
+  "description": "AI bot for Berkeley open source decal",
+  "constructor": "YaBotAI"
+}

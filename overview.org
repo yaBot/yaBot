@@ -1,0 +1,37 @@
+* Economics
+** Building manager
+*** Stochastic
+*** Deterministic
+**** Wrappers for each Building, to ensure load balancing
+** Population Manager
+** Controls the worker assignments
+* Military Manager
+** Unit Management
+*** Micromanagement functions
+** Ratios of unit usefulness, inserting units into queue
+* Information Manager
+** Informs the Military manager of the units we see, and this informs the ratios of unit usefulness
+** Resources Manager
+*** Keeps track of rates, derivatives
+** Map information
+
+
+* Things we want
+** Priority should be able to be read as a function
+*** At first, we probably just want the function to return the number we put in, but at later points, we'll likely put in say, time dependent functions
+** Possibly a function to determine number of workers to build a building?
+** Priority queue of units, which we go through each tick, and make sure they are building/going to be built
+** We are going to need to figure out how to place buildings, and have some logic for how to place buildings, how to place resource collection points for maximal efficiency
+** Assign how many to build based on priority of workers at current, priority of that building.
+** Info Manager
+*** Derivatives
+*** Enemy Unit estimates = Enemy units last seen + military buildings * rate of units
+*** What Civilization we are, they are
+*** Where we know their buildings are, our buildings are
+*** Where possibly resources are
+*** Find Place to build buildings
+*** Get Map
+*** Get time elapsed
+*** Percentages of each unit
+** Military Manager
+***
