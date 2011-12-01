@@ -2,8 +2,8 @@ class YaBotAI
    constructor: (settings) ->
         BaseAI.call this, settings
         this.turn = 0
-        this.modules = [ new MilitaryManager() ]
-        this.chat "Testing the Military manager"
+        this.modules = [ new TestManager() ]
+        this.chat "Testing the Test manager"
         this.firstTick = true
         this.savedEvents = []
         return null

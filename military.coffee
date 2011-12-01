@@ -1,3 +1,7 @@
+class ModuleManager
+        constructor: ->
+                @_test = 1
+
 class MilitaryManager extends ModuleManager
   constructor: ->
     @soldiers = {}
@@ -56,8 +60,8 @@ class MilitaryManager extends ModuleManager
     curPos = myUnits.getCentrePosition()
     target = [255, 255]
 
-    pathfinder = new PathFinder(gameState)
-    pathsToEnemy = pathFinder.getPaths()
-    rand = Math.floor(Math.random() * pathsToEnemy.length)
-    @path = pathsToEnemy[rand]
-    myUnits.move(@path[0][0], @path [0][1])
+    #pathfinder = new PathFinder(gameState)
+    #pathsToEnemy = pathFinder.getPaths()
+    #rand = Math.floor(Math.random() * pathsToEnemy.length)
+    #@path = pathsToEnemy[rand]
+    myUnits.move([0,0], [255,255])
