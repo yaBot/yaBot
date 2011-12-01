@@ -1,7 +1,7 @@
-Entity.prototype.deleteMetadata = (id) ->
+Entity::deleteMetadata = (id) ->
         delete @_ai._entityMetadata[@id()];
 
-EntityCollection.prototype.attack = (unit) ->
+EntityCollection::attack = (unit) ->
         unitId = if typeOf(unit) is "Entity" then unit.id() else unit
 
 	Engine.PostCommand
