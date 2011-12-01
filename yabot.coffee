@@ -1,4 +1,5 @@
-YaBotAI = (settings) ->
+class YaBotAI
+   constructor: (settings) ->
         BaseAI.call this, settings
         this.turn = 0
         this.modules = [ new MilitaryManager() ]
@@ -7,9 +8,7 @@ YaBotAI = (settings) ->
         this.savedEvents = []
         return null
 
-YaBotAI.prototype = new BaseAI()
-
-YaBotAI.prototype.OnUpdate = ->
+    onUpdate: ->
         # Run the update every n turns, offset depending on player ID to balance the load
         if (this.turn + this.player) % 4 == 0
                 Engine.ProfileStart("profile 1")
@@ -23,8 +22,10 @@ YaBotAI.prototype.OnUpdate = ->
         this.turn++
         return null
 
-YaBotAI.prototype.runInit = gameState ->
+    runInit: gameState ->
         if @firstTick
           module.init(gameState) for module in @modules
           myCivCenters = gameState.getOwnEntities().filter(-> ent.hasClass("CivCentre"))
         @firstTick = false
+
+YaBotAI.prototype = new BaseAI()
