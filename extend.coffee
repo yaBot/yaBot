@@ -5,7 +5,7 @@ EntityCollection::attack = (unit) ->
         unitId = if typeOf(unit) is "Entity" then unit.id() else unit
         Engine.PostCommand
                 type: "walk"
-                entities: this.toIdArray()
+                entities: @toIdArray()
                 target: unitId
                 queued: false
         return this;
@@ -13,9 +13,9 @@ EntityCollection::attack = (unit) ->
 EntityCollection::getCentrePosition = ->
         sumPos = [0, 0]
         count = 0
-        for thisent in ent
-                sumPos[0] += thisent.position()[0]
-                sumPos[1] += thisent.position()[1]
+        for ent in @toEntityArray()
+                sumPos[0] += ent.position()[0]
+                sumPos[1] += ent.position()[1]
                 count+=1
         if count == 0
                 return `undefined`

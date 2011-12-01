@@ -2,12 +2,12 @@ class GameState
         constructor: (ai) ->
                 MemoizeInit this
                 @ai = ai
-                @timeElapsed = timeElapsed
-                @templates = templates
-                @entities = entities
-                @player = player
-                @playerData = playerData
-                @buildingsBuilt = buildingsBuilt
+                @timeElapsed = ai.timeElapsed
+                @templates = ai.templates
+                @entities = ai.entities
+                @player = ai.player
+                @playerData = ai.playerData
+                @buildingsBuilt = ai.buildingsBuilt
 
                 @cellsize = 4 # Size of each map tile
                 return null
@@ -22,7 +22,7 @@ class GameState
                 str.replace /\{civ\}/g, @playerData.civ
 
         getResources: ->
-                new Resources this.playerData.resourceCounts
+                new Resources @playerData.resourceCounts
 
         getMap: ->
                 if @ai.map then @ai.map else @ai.passabilityMap
@@ -42,11 +42,11 @@ class GameState
         isPlayerEnemy: (id) -> @playerData.isEnemy[id]
         isEntityAlly: (ent) ->
                 if ent and ent.owner
-                        return this.playerData.isAlly[if typeof ent.owner is "function" then ent.owner() else ent.owner]
+                        return @playerData.isAlly[if typeof ent.owner is "function" then ent.owner() else ent.owner]
                 return false
         isEntityEnemy: (ent) ->
                 if ent and ent.owner
-                        return this.playerData.isEnemy[if typeof ent.owner is "function" then ent.owner() else ent.owner]
+                        return @playerData.isEnemy[if typeof ent.owner is "function" then ent.owner() else ent.owner]
                 return false
         isEntityEnemy: (ent) ->
                 if ent and ent.owner and typeof ent.owner is "function"
@@ -56,7 +56,7 @@ class GameState
 
                 return false
 
-        getOwnEntities: -> new EntityCollection @ai @ai._ownEntities
+        getOwnEntities: -> new EntityCollection @ai._ownEntities
 
         getOwnEntitiesWithRole: Memoize('getOwnEntitiesWithRole', (role) ->
                 metas = @ai._entityMetadata
@@ -76,10 +76,63 @@ class GameState
                 )
 
         countEntitiesWithType: (type) ->
-                foundationType = "foundation|" + type
                 count=0
                 @getOwnEntities().forEach ()->
-                        t = ent.templateName()
-                        if t == foundationType
+                        if (ent.templateName() == type)
                                 ++count
                 count
+
+        countFoundationsWithType: (type) ->
+                foundationType = "foundation|" + type
+                count = 0
+                @getOwnEntities().forEach ()->
+                        if (ent.templateName() == foundationType)
+                                ++count
+                return count
+
+        findTrainers: (template) ->
+                maxQueueLength = 2 #avoid tying up resources in giant training
+
+                return @getOwnEntities().filter (ent)->
+                        trainable = ent.trainableEntities()
+                        return false if (!trainable or trainable.indexOf(template) == -1)
+
+                        queue = ent.trainingQueue()
+                        return false if (queue and queue.length >= maxQueueLength)
+
+                        return true
+
+        findBuilders: (template) ->
+                return @getOwnEntities().filter (ent) ->
+                        buildable = ent.buildableEntities()
+                        return (!buildable or template not in buildable)
+
+        findFoundations: (template) ->
+                return @getOwnEntities().filter (ent) ->
+                        return ent.foundationProgress()?
+
+        findResourceSupplies: ->
+                supplies = {}
+                @entities.forEach (ent) ->
+                        type = ent.resourceSupplyType()
+                        return if (!type)
+                        amount = ent.resourceSupplyAmount()
+                        return if (!amount)
+
+                        if type.generic == "treasure"
+                                reportedType = type.specific
+                        else
+                                reportedType = type.generic
+
+                        if (!supplies[reportedType])
+                                supplies[reportedType] = []
+
+                        supplies[reportedType].push
+                                "entity" : ent,
+                                "amount" : amount,
+                                "type" : type,
+                                "position" : ent.position()
+
+
+                        return supplies
+

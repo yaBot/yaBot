@@ -1,31 +1,30 @@
-class YaBotAI
+class YaBotAI extends BaseAI
    constructor: (settings) ->
         BaseAI.call this, settings
-        this.turn = 0
-        this.modules = [ new TestManager() ]
-        this.chat "Testing the Test manager"
-        this.firstTick = true
-        this.savedEvents = []
+        @turn = 0
+        @modules = [ new MilitaryManager() ]
+        @chat "Testing the Military manager"
+        @firstTick = true
+        @savedEvents = []
         return null
 
-    onUpdate: ->
+    OnUpdate: ->
         # Run the update every n turns, offset depending on player ID to balance the load
-        if (this.turn + this.player) % 4 == 0
-                Engine.ProfileStart("profile 1")
-                @runInit(gameState)
+        if (@turn + @player) % 4 == 0
+                Engine.ProfileStart("yabot")
                 gameState = new GameState this
-                module.update(gameState, @savedEvents) for module in @modules
+                @runInit(gameState)
+                module.update(gameState) for module in @modules
 
                 #do stuff
                 Engine.ProfileStop()
 
-        this.turn++
+        @turn++
         return null
 
-    runInit: gameState ->
+    runInit: (gameState) ->
         if @firstTick
-          module.init(gameState) for module in @modules
-          myCivCenters = gameState.getOwnEntities().filter(-> ent.hasClass("CivCentre"))
-        @firstTick = false
-
-YaBotAI.prototype = new BaseAI()
+                @firstTick = false
+                module.init(gameState) for module in @modules
+                myCivCenters = gameState.getOwnEntities().filter(-> ent.hasClass("CivCentre"))
+        return null
