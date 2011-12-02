@@ -1,7 +1,3 @@
-class ModuleManager
-        constructor: ->
-                @_test = 1
-
 class MilitaryManager extends ModuleManager
         constructor: ->
                 @soldiers = {}
