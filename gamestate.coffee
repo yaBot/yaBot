@@ -56,7 +56,7 @@ class GameState
 
                 return false
 
-        getOwnEntities: -> new EntityCollection @ai._ownEntities
+        getOwnEntities: -> new EntityCollection(@ai, @ai._ownEntities)
 
         getOwnEntitiesWithRole: Memoize('getOwnEntitiesWithRole', (role) ->
                 metas = @ai._entityMetadata

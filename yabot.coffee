@@ -26,5 +26,5 @@ class YaBotAI extends BaseAI
         if @firstTick
                 @firstTick = false
                 module.init(gameState) for module in @modules
-                myCivCenters = gameState.getOwnEntities().filter(-> ent.hasClass("CivCentre"))
+                myCivCenters = gameState.getOwnEntities().filter((ent) -> ent.hasClass("CivCentre"))
         return null
