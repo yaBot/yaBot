@@ -2,8 +2,8 @@ class YaBotAI extends BaseAI
    constructor: (settings) ->
         BaseAI.call this, settings
         @turn = 0
-        @modules = [ new MilitaryManager() ]
-        @chat "Testing the Military manager"
+        @modules = [ new MilitaryManager(), new TestManager() ]
+        @chat "Test AI"
         @firstTick = true
         @savedEvents = []
         return null

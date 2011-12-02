@@ -7,7 +7,7 @@ class TestManager extends ModuleManager
 
         reassignRolelessUnits: (gameState) ->
                 roleless = gameState.getOwnEntitiesWithRole(`undefined`)
-                for ent in roleless
+                roleless.forEach (ent)->
                         if ent.hasClass("Worker")
                                 ent.setMetadata("role", "worker")
                         else
@@ -17,13 +17,15 @@ class TestManager extends ModuleManager
         trainMoreWorkers: (gameState) ->
                 numWorkers = gameState.getOwnEntitiesWithRole("worker").length
                 type = "units/{civ}_support_female_citizen"
+                type = gameState.applyCiv type
                 amount = 1
                 metadata = role: "worker"
 
                 if numWorkers < @targetNumWorkers
-                        trainers = gameState.findTrainers(gameState, gameState.applyCiv(type)).toEntityArray()
+                        trainers = gameState.findTrainers(type).toEntityArray()
+
                         trainers.sort (a, b) ->
-                                a.trainingQueueTime() - b.trainingQueueTime();
+                                a.trainingQueueTime() - b.trainingQueue
                         if trainers.length > 0
                                 trainers[0].train(type, amount, metadata)
                 return null

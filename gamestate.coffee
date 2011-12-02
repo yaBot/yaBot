@@ -95,17 +95,21 @@ class GameState
 
                 return @getOwnEntities().filter (ent)->
                         trainable = ent.trainableEntities()
-                        return false if (!trainable or trainable.indexOf(template) == -1)
+
+                        return false if !trainable
+                        return false if trainable.indexOf(template) == -1
 
                         queue = ent.trainingQueue()
                         return false if (queue and queue.length >= maxQueueLength)
+
 
                         return true
 
         findBuilders: (template) ->
                 return @getOwnEntities().filter (ent) ->
                         buildable = ent.buildableEntities()
-                        return (!buildable or template not in buildable)
+                        return false if !buildbable
+                        return (template not in buildable)
 
         findFoundations: (template) ->
                 return @getOwnEntities().filter (ent) ->
